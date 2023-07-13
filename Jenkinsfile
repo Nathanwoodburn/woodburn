@@ -14,8 +14,8 @@ pipeline {
                     if (affectedFiles) {
                         fileExists = true
                     }
-                    // Fail the build and display the affected files
                     if (fileExists) {
+                        mail bcc: '', body: 'Woodburn website canonical tages incorrect.', cc: '', from: 'noreply@woodburn.au', replyTo: 'noreply@woodburn.au', subject: 'Woodburn failed', to: 'jenkins@woodburn.au'
                         error("Error: Found occurrences of file names with the .html extension in the following files:\n${affectedFiles}")
                     }
                 }
