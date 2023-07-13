@@ -4,13 +4,13 @@ pipeline {
     stages {
         stage('Check HTML Files') {
             steps {
-                // Search for occurrences of "filename.html"
+                // Search for occurrences of the file name with the .html extension
                 script {
                     def fileExists = false
 
-                    // Find files with "filename.html" occurrences
+                    // Find files with occurrences of the file name with the .html extension
                     def affectedFiles = sh(
-                        script: 'find . -type f -name "*.html" -print0 | xargs -0 grep -l ".html"',
+                        script: 'find . -type f -name "*.html" -exec grep -l "{}" "{}" \\;',
                         returnStdout: true
                     ).trim()
 
@@ -21,7 +21,7 @@ pipeline {
 
                     // Fail the build and display the affected files
                     if (fileExists) {
-                        error("Error: Found occurrences of '.html' in the following files:\n${affectedFiles}")
+                        error("Error: Found occurrences of file names with the .html extension in the following files:\n${affectedFiles}")
                     }
                 }
             }
