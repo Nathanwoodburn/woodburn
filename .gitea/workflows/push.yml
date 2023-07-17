@@ -3,12 +3,14 @@ run-name: ${{ gitea.actor }} has pushed to woodburn repo
 on: [push]
 
 jobs:
-  Explore-Gitea-Actions:
+  CheckFiles:
     runs-on: ubuntu-latest
     steps:
       - name: Commiter
         run: |
           echo "Commited by: ${{ gitea.actor }}!"
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: List HTML files
         run: |
-          ls -R *.html
+          ls *.html
