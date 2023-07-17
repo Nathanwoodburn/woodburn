@@ -18,10 +18,10 @@ jobs:
         run: |
           for file in *.html; do
             if grep -q "$file" "$file"; then
-              echo "File $file contains $file!"
+              echo "File $file contains canonical tag with .html!"
               exit 1
             else
-              echo "File $file does not contain $file!"
+              echo "File $file is correct!"
             fi
           done
 
