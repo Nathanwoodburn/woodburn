@@ -14,3 +14,12 @@ jobs:
       - name: List HTML files
         run: |
           ls *.html
+      - name: Check files
+        run: |
+          for file in *.html; do
+            if grep -q "<file>" "$file"; then
+              echo "File $file contains <file>!"
+              exit 1
+            fi
+          done
+
