@@ -1,0 +1,14 @@
+name: OnPush
+run-name: ${{ gitea.actor }} has pushed to woodburn repo
+on: [push]
+
+jobs:
+  Explore-Gitea-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commiter
+        run: |
+          echo "Commited by: ${{ gitea.actor }}!"
+      - name: List HTML files
+        run: |
+          ls -R *.html
