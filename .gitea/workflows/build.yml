@@ -1,0 +1,27 @@
+name: Build Docker
+run-name: Build Docker
+on: [push]
+
+jobs:
+  CheckFiles:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check files 
+        run: |
+          for file in *.html; do
+            if grep -q "$file" "$file"; then
+              echo "File $file contains canonical tag with .html!"
+              exit 1
+            else
+              echo "File $file is correct!"
+            fi
+          done
+      - name: Build Docker image
+        run : |
+          echo "${{ secrets.DOCKERGIT_TOKEN }}" | docker login git.woodburn.au -u nathanwoodburn --password-stdin
+          docker build -t woodburn-website:latest .
+          docker push git.woodburn.au/nathanwoodburn/woodburn-website:latest
+
+
