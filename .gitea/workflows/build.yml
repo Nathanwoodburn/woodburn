@@ -29,6 +29,7 @@ jobs:
           apt-get install docker-ce-cli -y
           echo "${{ secrets.DOCKERGIT_TOKEN }}" | docker login git.woodburn.au -u nathanwoodburn --password-stdin
           docker build -t woodburn:latest .
+          docker tag woodburn:latest git.woodburn.au/nathanwoodburn/woodburn:latest
           docker push git.woodburn.au/nathanwoodburn/woodburn:latest
 
 
