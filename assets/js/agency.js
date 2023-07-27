@@ -35,9 +35,9 @@
       }
     };
     // Collapse now if page is not at top
-    collapseNavbar();
+    // collapseNavbar();
     // Collapse the navbar when page is scrolled
-    document.addEventListener("scroll", collapseNavbar);
+    // document.addEventListener("scroll", collapseNavbar);
 
     // Hide navbar when modals trigger
     var modals = document.querySelectorAll('.portfolio-modal');
