@@ -1,11 +1,14 @@
 name: Build Docker
-run-name: Build Docker
+run-name: Build Docker Image
 on: [push]
 
 jobs:
-  Build Docker:
+  CheckFiles:
     runs-on: ubuntu-latest
     steps:
+      - name: Commiter
+        run: |
+          echo "Commited by: ${{ gitea.actor }}!"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check files 
@@ -18,6 +21,11 @@ jobs:
               echo "File $file is correct!"
             fi
           done
+  Build Docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Build Docker image
         run : |
           apt-get install ca-certificates curl gnupg
