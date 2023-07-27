@@ -3,7 +3,7 @@ run-name: Build Docker
 on: [push]
 
 jobs:
-  CheckFiles:
+  Build Docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,6 +21,8 @@ jobs:
       - name: Build Docker image
         run : |
           cat /etc/os-release
+          apt -y install docker-ce docker-ce-cli containerd.io
+
           echo "${{ secrets.DOCKERGIT_TOKEN }}" | docker login git.woodburn.au -u nathanwoodburn --password-stdin
           docker build -t woodburn-website:latest .
           docker push git.woodburn.au/nathanwoodburn/woodburn-website:latest
