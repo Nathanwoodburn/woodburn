@@ -20,7 +20,7 @@ jobs:
           done
       - name: Build Docker image
         run : |
-          apt install docker.io -y
+          apk add --no-cache docker-cli
           echo "${{ secrets.DOCKERGIT_TOKEN }}" | docker login git.woodburn.au -u nathanwoodburn --password-stdin
           docker build -t woodburn-website:latest .
           docker push git.woodburn.au/nathanwoodburn/woodburn-website:latest
