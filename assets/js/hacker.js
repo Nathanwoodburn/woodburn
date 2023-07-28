@@ -5,32 +5,32 @@ let interval2 = null;
 let interval3 = null;
 
 
-window.onload = (event) => {
+// window.onload = (event) => {
 
-target = document.querySelector(".nathanwoodburn");
-  let iteration = 0;
-  let final = "NATHAN.WOODBURN/";
-  clearInterval(interval);
+// target = document.querySelector(".nathanwoodburn");
+//   let iteration = 0;
+//   let final = "NATHAN.WOODBURN/";
+//   clearInterval(interval);
   
-  interval = setInterval(() => {
-    target.innerText = target.innerText
-      .split("")
-      .map((letter, index) => {
-        if(index < iteration) {
-          return final[index];
-        }
+//   interval = setInterval(() => {
+//     target.innerText = target.innerText
+//       .split("")
+//       .map((letter, index) => {
+//         if(index < iteration) {
+//           return final[index];
+//         }
       
-        return letters[Math.floor(Math.random() * 41)]
-      })
-      .join("");
+//         return letters[Math.floor(Math.random() * 41)]
+//       })
+//       .join("");
     
-    if(iteration >= final.length){ 
-      clearInterval(interval);
-    }
+//     if(iteration >= final.length){ 
+//       clearInterval(interval);
+//     }
     
-    iteration += 1 / 3;
-  }, 30);
-};
+//     iteration += 1 / 3;
+//   }, 30);
+// };
 
 document.querySelector(".copyright").onmouseover = event => {  
     let iteration2 = 0;
