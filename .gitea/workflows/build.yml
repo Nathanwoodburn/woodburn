@@ -37,7 +37,7 @@ jobs:
           apt-get update
           apt-get install docker-ce-cli -y
           echo "${{ secrets.DOCKERGIT_TOKEN }}" | docker login git.woodburn.au -u nathanwoodburn --password-stdin
-          tag_num=$(git rev-list --count main)
+          tag_num=$(git rev-parse --short HEAD)
           docker build -t woodburn:$tag_num .
           docker tag woodburn:$tag_num git.woodburn.au/nathanwoodburn/woodburn:$tag_num
           docker push git.woodburn.au/nathanwoodburn/woodburn:$tag_num
