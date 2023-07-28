@@ -46,6 +46,5 @@ function checkStatuses(){
         else document.getElementById('hnshosting').style.color = '#ff0000';
     });
 }
-
 // Check on load
 checkStatuses();
