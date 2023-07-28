@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build Docker image
+      - name: Install Docker
         run : |
           apt-get install ca-certificates curl gnupg
           install -m 0755 -d /etc/apt/keyrings
@@ -36,9 +36,13 @@ jobs:
           echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
           apt-get update
           apt-get install docker-ce-cli -y
+      - name: Build Docker image
+        run : |          
           echo "${{ secrets.DOCKERGIT_TOKEN }}" | docker login git.woodburn.au -u nathanwoodburn --password-stdin
           tag_num=$(git rev-parse --short HEAD)
           docker build -t woodburn:$tag_num .
+      - name: Push Docker image
+        run : |
           docker tag woodburn:$tag_num git.woodburn.au/nathanwoodburn/woodburn:$tag_num
           docker push git.woodburn.au/nathanwoodburn/woodburn:$tag_num
           docker tag woodburn:$tag_num git.woodburn.au/nathanwoodburn/woodburn:latest
