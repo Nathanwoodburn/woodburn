@@ -41,5 +41,7 @@ jobs:
           docker build -t woodburn:$tag_num .
           docker tag woodburn:$tag_num git.woodburn.au/nathanwoodburn/woodburn:$tag_num
           docker push git.woodburn.au/nathanwoodburn/woodburn:$tag_num
+          docker tag woodburn:$tag_num git.woodburn.au/nathanwoodburn/woodburn:latest
+          docker push git.woodburn.au/nathanwoodburn/woodburn:latest
 
 
