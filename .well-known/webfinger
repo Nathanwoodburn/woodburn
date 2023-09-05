@@ -1,9 +1,25 @@
 {
   "subject": "acct:nathan@woodburn.au",
   "links": [
-    {
-      "rel": "http://openid.net/specs/connect/1.0/issuer",
-      "href": "https://auth.woodburn.au"
-    }
+      {
+          "rel": "http://openid.net/specs/connect/1.0/issuer",
+          "href": "https://auth.woodburn.au/application/o/tailscale/"
+      },
+      {
+          "rel": "authorization_endpoint",
+          "href": "https://auth.woodburn.au/application/o/tailscale/oauth2/authorize"
+      },
+      {
+          "rel": "token_endpoint",
+          "href": "https://auth.woodburn.au/application/o/tailscale/oauth2/token"
+      },
+      {
+          "rel": "userinfo_endpoint",
+          "href": "https://auth.woodburn.au/application/o/tailscale/userinfo"
+      },
+      {
+          "rel": "jwks_uri",
+          "href": "https://auth.woodburn.au/application/o/tailscale/jwks"
+      }
   ]
-}
+} 
