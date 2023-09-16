@@ -22,7 +22,7 @@ jobs:
             fi
           done
   Build Docker:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, amd]
     needs: CheckFiles
     steps:
       - name: Checkout
@@ -37,7 +37,7 @@ jobs:
           apt-get update
           apt-get install docker-ce-cli -y
       - name: Build Docker image
-        run : |          
+        run : |
           echo "${{ secrets.DOCKERGIT_TOKEN }}" | docker login git.woodburn.au -u nathanwoodburn --password-stdin
           tag_num=$(git rev-parse --short HEAD)
           docker build -t woodburn:$tag_num .
