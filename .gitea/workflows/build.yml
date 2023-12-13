@@ -3,8 +3,24 @@ run-name: Build Docker Image
 on: [push]
 
 jobs:
+  FixFiles:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commiter
+        run: |
+          echo "Commited by: ${{ gitea.actor }}!"
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Fix files 
+        run: |
+          for file in *.html; do
+            sed -i 's/\.html//g' "$file"
+          done
+
+
   CheckFiles:
     runs-on: ubuntu-latest
+    needs: FixFiles
     steps:
       - name: Commiter
         run: |
