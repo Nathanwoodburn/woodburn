@@ -34,7 +34,7 @@ let interval3 = null;
 
 document.querySelector(".copyright").onmouseover = event => {  
     let iteration2 = 0;
-    let old2 = "Copyright © Nathan Woodburn 2023";
+    let old2 = "Copyright © Nathan.Woodburn/ 2024";
     console.log(old2);
     clearInterval(interval2);
     
