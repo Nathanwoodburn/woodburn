@@ -18,12 +18,13 @@ from datetime import datetime
 import dotenv
 from authlib.integrations.flask_client import OAuth
 from flask_caching import Cache
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 dotenv.load_dotenv()
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 app.secret_key = os.getenv("APP_SECRET_KEY", os.urandom(24))
-app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Cache Configuration
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
