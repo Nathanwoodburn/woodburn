@@ -18,7 +18,6 @@ from datetime import datetime
 import dotenv
 from authlib.integrations.flask_client import OAuth
 from flask_caching import Cache
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 dotenv.load_dotenv()
 
@@ -27,22 +26,23 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 app.secret_key = os.getenv("APP_SECRET_KEY", os.urandom(24))
 
 # Cache Configuration
-cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
+cache = Cache(app, config={"CACHE_TYPE": "SimpleCache", "CACHE_DEFAULT_TIMEOUT": 300})
 
 # OAuth Configuration
 oauth = OAuth(app)
 oauth.register(
-    name='authentik',
-    server_metadata_url=os.getenv('AUTHENTIK_METADATA_URL'),
-    client_id=os.getenv('AUTHENTIK_CLIENT_ID'),
-    client_secret=os.getenv('AUTHENTIK_CLIENT_SECRET'),
+    name="authentik",
+    server_metadata_url=os.getenv("AUTHENTIK_METADATA_URL"),
+    client_id=os.getenv("AUTHENTIK_CLIENT_ID"),
+    client_secret=os.getenv("AUTHENTIK_CLIENT_SECRET"),
     client_kwargs={
-        'scope': 'openid profile email',
-    }
+        "scope": "openid profile email",
+    },
 )
 
+
 def load_services():
-    with open('services.json', 'r') as f:
+    with open("services.json", "r") as f:
         return json.load(f)
 
 
@@ -78,6 +78,7 @@ def send_assets(path):
 
     return render_template("404.html"), 404
 
+
 @app.route("/services/<string:category>/<string:service>.png")
 @cache.cached(timeout=3600, query_string=True)
 def service_images(category: str, service: str):
@@ -88,10 +89,14 @@ def service_images(category: str, service: str):
             if "icon" in svc:
                 # If the icon isn't a URL, try to serve it from the filesystem
                 if not svc["icon"].startswith("http"):
-                    icon_path = os.path.join("templates/assets/img/services", svc["icon"])
+                    icon_path = os.path.join(
+                        "templates/assets/img/services", svc["icon"]
+                    )
                     if os.path.isfile(icon_path):
                         return make_response(
-                            open(icon_path, "rb").read(), 200, {"Content-Type": "image/png"}
+                            open(icon_path, "rb").read(),
+                            200,
+                            {"Content-Type": "image/png"},
                         )
                     else:
                         print(f"Icon file not found for {service} at {icon_path}")
@@ -102,17 +107,19 @@ def service_images(category: str, service: str):
                     req = requests.get(svc["icon"], timeout=5)
                     if req.status_code == 200:
                         return make_response(
-                            req.content, 200, {"Content-Type": req.headers["Content-Type"]}
+                            req.content,
+                            200,
+                            {"Content-Type": req.headers["Content-Type"]},
                         )
                 except Exception as e:
                     print(f"Failed to fetch icon for {service}: {e}")
-                    
-            
+
             # Read default favicon into memory to allow caching (pickling)
             with open("templates/assets/img/favicon.png", "rb") as f:
                 return make_response(f.read(), 200, {"Content-Type": "image/png"})
 
     return render_template("404.html"), 404
+
 
 # region Special routes
 @app.route("/favicon.png")
@@ -137,11 +144,13 @@ def wellknown(path):
 def index():
     # Get current time in the format "dd MMM YYYY hh:mm AM/PM"
     current_datetime = datetime.now().strftime("%d %b %Y %I:%M %p")
-    
+
     services = load_services()
-    user = session.get('user')
-    
-    return render_template("index.html", datetime=current_datetime, services=services, user=user)
+    user = session.get("user")
+
+    return render_template(
+        "index.html", datetime=current_datetime, services=services, user=user
+    )
 
 
 @app.route("/<path:path>")
@@ -205,33 +214,37 @@ def not_found(e):
 # endregion
 # region Auth routes
 
-@app.route('/login')
+
+@app.route("/login")
 def login():
-    redirect_uri = url_for('auth_callback', _external=True)
+    redirect_uri = url_for("auth_callback", _external=True)
     return oauth.authentik.authorize_redirect(redirect_uri)  # type: ignore
 
 
-@app.route('/auth/callback')
+@app.route("/auth/callback")
 def auth_callback():
-    token = oauth.authentik.authorize_access_token() # type: ignore
-    user = token.get('userinfo')
+    token = oauth.authentik.authorize_access_token()  # type: ignore
+    user = token.get("userinfo")
     if user:
-        session['user'] = user
-    return redirect(url_for('index'))
+        session["user"] = user
+    return redirect(url_for("index"))
 
 
-@app.route('/logout')
+@app.route("/logout")
 def logout():
-    session.pop('user', None)
-    return redirect(url_for('index'))
+    session.pop("user", None)
+    return redirect(url_for("index"))
+
 
 # endregion
 
 # region Error handling
 
+
 @app.errorhandler(InternalServerError)
 def handle_internal_server_error(e: InternalServerError):
     return render_template("500.html", message=e.original_exception), 500
+
 
 # endregion
 
