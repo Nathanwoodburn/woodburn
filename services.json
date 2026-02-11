@@ -1,0 +1,91 @@
+{
+    "external": [
+        {
+            "id": "nathan_woodburn",
+            "name": "Nathan.Woodburn/",
+            "url": "https://nathan.woodburn.au",
+            "description": "Nathan's Website"
+        },
+        {
+            "id": "git",
+            "name": "Woodburn Git",
+            "url": "https://git.woodburn.au",
+            "description": "Woodburn Git Repository"
+        },
+        {
+            "id": "tools",
+            "name": "Tools",
+            "url": "https://tools.woodburn.au",
+            "description": "Useful Tools and Resources",
+            "icon": "https://tools.woodburn.au/android-chrome-192x192.png"
+        },
+        {
+            "id": "uptime",
+            "name": "Uptime",
+            "url": "https://uptime.woodburn.au",
+            "description": "Service Status and Uptime Monitoring"
+        },
+        {
+            "id": "podcast",
+            "name": "WVAC Podcast",
+            "url": "https://podcast.woodburn.au",
+            "description": "WVAC Podcast"
+        },
+        {
+            "id": "transfer_sh",
+            "name": "Transfer.sh",
+            "url": "https://upload.woodburn.au/",
+            "description": "File Sharing Service for Command Line",
+            "icon": "https://upload.woodburn.au/favicon.ico"
+        }
+    ],
+    "internal": [
+        {
+            "id": "cloud",
+            "name": "Woodburn Cloud",
+            "url": "https://cloud.woodburn.au",
+            "description": "Personal Cloud Storage and File Sharing Service"
+        },
+        {
+            "id": "links",
+            "name": "Link Shortener",
+            "url": "https://l.woodburn.au",
+            "description": "Personal Link Shortening Service for Easy Sharing"
+        },
+        {
+            "id": "bitwarden",
+            "name": "Bitwarden",
+            "url": "https://bw.woodburn.au",
+            "description": "Personal Password Manager (requires invitation)",
+            "icon": "vaultwarden.png"
+        },
+        {
+            "id": "kitchen_owl",
+            "name": "Kitchen Owl",
+            "url": "https://shopping.woodburn.au",
+            "description": "Personal Grocery List and Meal Planning Service",
+            "icon": "https://shopping.woodburn.au/icons/Icon-192.png"
+        },
+        {
+            "id": "immich",
+            "name": "Immich",
+            "url": "https://immich.woodburn.au",
+            "description": "Personal Photo and Video Management Service",
+            "icon": "https://immich.woodburn.au/favicon-144.png"
+        },
+        {
+            "id": "adventure",
+            "name": "Adventure Log",
+            "url": "https://adventure.c.woodburn.au",
+            "description": "Personal Travel and Adventure Log",
+            "icon": "https://adventure.c.woodburn.au/favicon.png"
+        },
+        {
+            "id": "vpn",
+            "name": "VPN Service",
+            "url": "https://vpn.woodburn.au",
+            "description": "Personal VPN Service for Secure Browsing and Remote Access",
+            "icon": "https://netbird.io/icon.png"            
+        }
+    ]
+}

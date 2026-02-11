@@ -1,1 +1,0 @@
-powershell -executionpolicy bypass -File cleanup.ps1

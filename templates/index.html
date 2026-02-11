@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woodburn/</title>
+    <link rel="icon" href="/assets/img/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+
+<body>
+    <div class="auth-status">
+        {% if user %}
+            <span>Hello, {{ user.preferred_username | title or user.name or user.email }}</span>
+            <a href="/logout" class="btn">Logout</a>
+        {% else %}
+            <a href="/login" class="btn">Login</a>
+        {% endif %}
+    </div>
+
+    <div class="centre">
+        <h1>Woodburn/</h1>
+        <span>{{ datetime }}</span>
+    </div>
+
+    <div class="container">
+        <h3 class="section-title">External Services</h3>
+        <div class="services-grid">
+            {% for service in services.external %}
+            <a href="{{ service.url }}" class="service-card" target="_blank">
+                <img src="/services/external/{{ service.id }}.png" alt="{{ service.name }}" class="service-icon">
+                <h4 class="service-name">{{ service.name }}</h4>
+                <p class="service-desc">{{ service.description }}</p>
+            </a>
+            {% endfor %}
+        </div>
+
+        {% if user %}
+        <h3 class="section-title">Internal Services</h3>
+        <div class="services-grid">
+            {% for service in services.internal %}
+            <a href="{{ service.url }}" class="service-card" target="_blank">
+                <img src="/services/internal/{{ service.id }}.png" alt="{{ service.name }}" class="service-icon">
+                <h4 class="service-name">{{ service.name }}</h4>
+                <p class="service-desc">{{ service.description }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
