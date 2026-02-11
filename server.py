@@ -10,6 +10,7 @@ from flask import (
     url_for,
 )
 from werkzeug.exceptions import InternalServerError
+from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 import json
 import requests
@@ -22,6 +23,7 @@ dotenv.load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY", os.urandom(24))
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Cache Configuration
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
