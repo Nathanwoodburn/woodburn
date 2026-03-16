@@ -18,6 +18,8 @@ from datetime import datetime
 import dotenv
 from authlib.integrations.flask_client import OAuth
 from flask_caching import Cache
+from tools.cloud import getUserQuota
+from tools.immich import get_immich_stats
 
 dotenv.load_dotenv()
 
@@ -199,6 +201,37 @@ def api_data():
         "timestamp": datetime.now().isoformat(),
     }
     return jsonify(data)
+
+
+@app.route("/api/v1/cloud_quota", methods=["GET"])
+def api_cloud_quota():
+    """
+    API endpoint to get the user's cloud quota information.
+    """
+
+    user = session.get("user")
+    if not user:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    quota_info = getUserQuota(user["preferred_username"])
+    if "error" in quota_info:
+        return jsonify(quota_info), 500
+    return jsonify(quota_info)
+
+
+@app.route("/api/v1/immich", methods=["GET"])
+def api_immich_stats():
+    """
+    API endpoint to get the user's Immich stats.
+    """
+
+    user = session.get("user")
+    if not user:
+        return jsonify({"error": "Unauthorized"}), 401
+    stats = get_immich_stats(user["sub"])
+    if "error" in stats:
+        return jsonify(stats), 500
+    return jsonify(stats)
 
 
 # endregion

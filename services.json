@@ -29,7 +29,8 @@
             "id": "podcast",
             "name": "WVAC Podcast",
             "url": "https://podcast.woodburn.au",
-            "description": "WVAC Podcast"
+            "description": "WVAC Podcast",
+            "icon": "https://ya.c.woodburn.au/assets/img/favicon.png"
         },
         {
             "id": "transfer_sh",

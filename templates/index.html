@@ -7,6 +7,7 @@
     <title>Woodburn/</title>
     <link rel="icon" href="/assets/img/favicon.png" type="image/png">
     <link rel="stylesheet" href="/assets/css/index.css">
+    <script src="/assets/js/index.js" defer></script>
 </head>
 
 <body>
@@ -25,7 +26,7 @@
     </div>
 
     <div class="container">
-        <h3 class="section-title">External Services</h3>
+        <h3 class="section-title">Services</h3>
         <div class="services-grid">
             {% for service in services.external %}
             <a href="{{ service.url }}" class="service-card" target="_blank">
@@ -40,7 +41,7 @@
         <h3 class="section-title">Internal Services</h3>
         <div class="services-grid">
             {% for service in services.internal %}
-            <a href="{{ service.url }}" class="service-card" target="_blank">
+            <a href="{{ service.url }}" class="service-card" target="_blank" id="{{ service.id }}">
                 <img src="/services/internal/{{ service.id }}.png" alt="{{ service.name }}" class="service-icon">
                 <h4 class="service-name">{{ service.name }}</h4>
                 <p class="service-desc">{{ service.description }}</p>
