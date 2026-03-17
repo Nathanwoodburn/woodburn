@@ -234,6 +234,23 @@ def api_immich_stats():
     return jsonify(stats)
 
 
+@app.route("/api/v1/links", methods=["GET"])
+def api_links_stats():
+    """
+    API endpoint to get the user's Links stats.
+    """
+
+    user = session.get("user")
+    if not user:
+        return jsonify({"error": "Unauthorized"}), 401
+    from tools.links import get_links_stats
+
+    stats = get_links_stats(user["email"])
+    if "error" in stats:
+        return jsonify(stats), 500
+    return jsonify(stats)
+
+
 # endregion
 
 

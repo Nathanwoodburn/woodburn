@@ -42,4 +42,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("Error fetching Immich stats:", error);
             });
     }
+
+    // Fetch Links stats and display them
+    const linksLink = document.getElementById("links");
+    if (linksLink) {
+        fetch("/api/v1/links")
+            .then(response => response.json())
+            .then(data => {
+                if (!data.error) {
+                    // Create a new span element to display the stats
+                    const statsLabel = document.createElement("p");
+                    statsLabel.classList.add("service-note");
+                    statsLabel.textContent = `Links: ${data.links_count}`;
+                    // Append the stats span to the Links link
+                    linksLink.appendChild(statsLabel);
+                } else {
+                    console.error("Error fetching Links stats:", data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching Links stats:", error);
+            });
+    }
 });
