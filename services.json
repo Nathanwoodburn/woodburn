@@ -54,10 +54,10 @@
             "description": "Personal Link Shortening Service for Easy Sharing"
         },
         {
-            "id": "bitwarden",
-            "name": "Bitwarden",
+            "id": "Vaultwarden",
+            "name": "Vaultwarden",
             "url": "https://bw.woodburn.au",
-            "description": "Personal Password Manager (requires invitation)",
+            "description": "Personal Password Manager",
             "icon": "vaultwarden.png"
         },
         {
