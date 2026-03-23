@@ -104,3 +104,11 @@ a:hover {
     background-color: #444;
     text-decoration: none;
 }
+
+.success {
+    color: #4CAF50;
+}
+
+.failure {
+    color: #f44336;
+}

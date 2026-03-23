@@ -64,4 +64,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("Error fetching Links stats:", error);
             });
     }
+
+    // Check VPN status and display it
+    const vpnLink = document.getElementById("vpn");
+    if (vpnLink) {
+        fetch("https://vpn.woodburn.net.au/api/v1/status")
+            .then(response => response.json())
+            .then(data => {
+                if (!data.error) {
+                    // Create a new span element to display the VPN status
+                    const statusLabel = document.createElement("p");
+                    statusLabel.classList.add("service-note");
+                    statusLabel.textContent = data.connected ? "Connected" : "Disconnected";
+                    if (data.connected) {
+                        statusLabel.classList.add("success");
+                    } else {
+                        statusLabel.classList.add("failure");
+                    }
+                    // Append the status span to the VPN link
+                    vpnLink.appendChild(statusLabel);
+                } else {
+                    console.error("Error fetching VPN status:", data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching VPN status:", error);
+            });
+    }
 });
