@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Create a new span element to display the quota
                     const quotaLabel = document.createElement("p");
                     quotaLabel.classList.add("service-note");
-                    quotaLabel.textContent = `${data.used} GB used / ${data.total} GB total`;
+                    quotaLabel.textContent = `${data.used.toLocaleString()} GB used / ${data.total.toLocaleString()} GB total`;
                     // Append the quota span to the cloud link
                     cloudLink.appendChild(quotaLabel);
                 } else {
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Create a new span element to display the stats
                     const statsLabel = document.createElement("p");
                     statsLabel.classList.add("service-note");
-                    statsLabel.textContent = `Images: ${data.images}, Videos: ${data.videos}`;
+                    statsLabel.textContent = `Images: ${data.images.toLocaleString()}, Videos: ${data.videos.toLocaleString()}`;
                     // Append the stats span to the Immich link
                     immichLink.appendChild(statsLabel);
                 } else {
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Create a new span element to display the stats
                     const statsLabel = document.createElement("p");
                     statsLabel.classList.add("service-note");
-                    statsLabel.textContent = `Links: ${data.links_count}`;
+                    statsLabel.textContent = `Links: ${data.links_count.toLocaleString()}`;
                     // Append the stats span to the Links link
                     linksLink.appendChild(statsLabel);
                 } else {

@@ -181,26 +181,9 @@ def catch_all(path: str):
 
 
 # region API routes
-
-api_requests = 0
-
-
-@app.route("/api/v1/data", methods=["GET"])
-def api_data():
-    """
-    Example API endpoint that returns some data.
-    You can modify this to return whatever data you need.
-    """
-
-    global api_requests
-    api_requests += 1
-
-    data = {
-        "header": "Sample API Response",
-        "content": f"Hello, this is a sample API response! You have called this endpoint {api_requests} times.",
-        "timestamp": datetime.now().isoformat(),
-    }
-    return jsonify(data)
+@app.route("/api/v1/status")
+def api_status():
+    return jsonify({"status": "ok"})
 
 
 @app.route("/api/v1/cloud_quota", methods=["GET"])
