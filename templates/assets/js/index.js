@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Create a new span element to display the stats
                     const statsLabel = document.createElement("p");
                     statsLabel.classList.add("service-note");
-                    statsLabel.textContent = `Images: ${data.images}, Videos: ${data.videos}`;
+                    statsLabel.textContent = `Images: ${data.images.toLocaleString()}, Videos: ${data.videos}`;
                     // Append the stats span to the Immich link
                     immichLink.appendChild(statsLabel);
                 } else {
