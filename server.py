@@ -60,12 +60,30 @@ def isCLI(request) -> bool:
     Returns:
         bool: True if the request is from a CLI agent or ASCII format requested, False otherwise
     """
-    if request.args.get("format") in ["ascii", "txt", "text", "cli"] or request.args.get("cli") in ["1", "true"]:
+    if request.args.get("format") in [
+        "ascii",
+        "txt",
+        "text",
+        "cli",
+    ] or request.args.get("cli") in ["1", "true"]:
         return True
     if request.headers and request.headers.get("User-Agent"):
         user_agent = request.headers.get("User-Agent", "")
         return any(agent in user_agent for agent in CLI_AGENTS)
     return False
+
+
+def get_client_ip(request) -> str:
+    """
+    Extract the real client IP address considering reverse proxies (Cloudflare, NGINX, etc.).
+    """
+    if cf_ip := request.headers.get("CF-Connecting-IP"):
+        return cf_ip.strip()
+    if x_real := request.headers.get("X-Real-IP"):
+        return x_real.strip()
+    if x_forwarded := request.headers.get("X-Forwarded-For"):
+        return x_forwarded.split(",")[0].strip()
+    return request.remote_addr or ""
 
 
 def load_services():
@@ -187,7 +205,7 @@ def index():
             user=user,
             use_color=use_color,
             base_url=request.host_url.rstrip("/"),
-            client_ip=request.remote_addr or "",
+            client_ip=get_client_ip(request),
         )
         return make_response(
             ascii_output, 200, {"Content-Type": "text/plain; charset=utf-8"}
