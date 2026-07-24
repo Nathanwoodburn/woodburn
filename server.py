@@ -1,23 +1,27 @@
+import json
+import os
+from datetime import datetime
+
+import dotenv
+import requests
+from authlib.integrations.flask_client import OAuth
 from flask import (
     Flask,
-    make_response,
     jsonify,
-    render_template,
-    send_from_directory,
-    send_file,
-    session,
+    make_response,
     redirect,
+    render_template,
+    request,
+    send_file,
+    send_from_directory,
+    session,
     url_for,
 )
+from flask_caching import Cache
 from werkzeug.exceptions import InternalServerError
 from werkzeug.middleware.proxy_fix import ProxyFix
-import os
-import json
-import requests
-from datetime import datetime
-import dotenv
-from authlib.integrations.flask_client import OAuth
-from flask_caching import Cache
+
+from tools.ascii import render_ascii_page
 from tools.cloud import getUserQuota
 from tools.immich import get_immich_stats
 
@@ -41,6 +45,27 @@ oauth.register(
         "scope": "openid profile email",
     },
 )
+
+# CLI Agents to return cli formatted responses
+CLI_AGENTS = ["curl", "hurl", "xh", "Posting", "HTTPie", "nushell"]
+
+
+def isCLI(request) -> bool:
+    """
+    Check if the request is from curl, hurl, xh, etc., or requested via query param.
+
+    Args:
+        request (Request): The Flask request object
+
+    Returns:
+        bool: True if the request is from a CLI agent or ASCII format requested, False otherwise
+    """
+    if request.args.get("format") in ["ascii", "txt", "text", "cli"] or request.args.get("cli") in ["1", "true"]:
+        return True
+    if request.headers and request.headers.get("User-Agent"):
+        user_agent = request.headers.get("User-Agent", "")
+        return any(agent in user_agent for agent in CLI_AGENTS)
+    return False
 
 
 def load_services():
@@ -149,6 +174,24 @@ def index():
 
     services = load_services()
     user = session.get("user")
+
+    if isCLI(request):
+        use_color = not (
+            request.args.get("color") in ["0", "false", "no"]
+            or request.args.get("plain") in ["1", "true", "yes"]
+            or "NO_COLOR" in request.headers
+        )
+        ascii_output = render_ascii_page(
+            datetime_str=current_datetime,
+            services=services,
+            user=user,
+            use_color=use_color,
+            base_url=request.host_url.rstrip("/"),
+            client_ip=request.remote_addr or "",
+        )
+        return make_response(
+            ascii_output, 200, {"Content-Type": "text/plain; charset=utf-8"}
+        )
 
     return render_template(
         "index.html", datetime=current_datetime, services=services, user=user
