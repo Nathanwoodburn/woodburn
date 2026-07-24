@@ -154,13 +154,9 @@ def generate_favicon_logo(use_color: bool = True) -> list[str]:
                             f"\033[48;2;{bot_r};{bot_g};{bot_b}m▀\033[0m"
                         )
                     elif top_active:
-                        line_parts.append(
-                            f"\033[38;2;{top_r};{top_g};{top_b}m▀\033[0m"
-                        )
+                        line_parts.append(f"\033[38;2;{top_r};{top_g};{top_b}m▀\033[0m")
                     elif bot_active:
-                        line_parts.append(
-                            f"\033[38;2;{bot_r};{bot_g};{bot_b}m▄\033[0m"
-                        )
+                        line_parts.append(f"\033[38;2;{bot_r};{bot_g};{bot_b}m▄\033[0m")
                     else:
                         line_parts.append(" ")
                 else:
@@ -210,7 +206,6 @@ HEADER_TEXT = [
 
 
 def render_ascii_page(
-    datetime_str: str,
     services: dict[str, Any],
     user: dict[str, Any] | None = None,
     use_color: bool = True,
@@ -235,9 +230,6 @@ def render_ascii_page(
         lines.append(f"{c['BOLD_CYAN']}{header_line}{c['RESET']}")
     lines.append(divider)
     lines.append("")
-
-    # 2. Date & Auth Status
-    lines.append(f"Date:    {c['BOLD']}{datetime_str}{c['RESET']}")
 
     if user:
         username = (
@@ -265,7 +257,7 @@ def render_ascii_page(
         sec_underline = f"{c['BOLD_CYAN']}{'─' * (len(title) + 2)}{c['RESET']}"
         return [sec_divider, sec_title, sec_underline, ""]
 
-    # 3. External Services
+    # 2. External Services
     if services.get("external"):
         lines.extend(render_section_header("SERVICES"))
         for svc in services["external"]:
@@ -280,7 +272,7 @@ def render_ascii_page(
                 lines.append(f"  {c['GRAY']}{desc}{c['RESET']}")
             lines.append("")
 
-    # 4. Internal Services (Only if user is logged in)
+    # 3. Internal Services (Only if user is logged in)
     if user and services.get("internal"):
         lines.extend(render_section_header("INTERNAL SERVICES"))
         for svc in services["internal"]:
@@ -295,7 +287,7 @@ def render_ascii_page(
                 lines.append(f"  {c['GRAY']}{desc}{c['RESET']}")
             lines.append("")
 
-    # 5. Footer matching nathan.woodburn.au
+    # 4. Footer matching nathan.woodburn.au
     if client_ip:
         lines.append(f"Served to: {client_ip}")
         lines.append(divider)

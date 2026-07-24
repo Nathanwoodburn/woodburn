@@ -1,6 +1,5 @@
 import json
 import os
-from datetime import datetime
 
 import dotenv
 import requests
@@ -110,12 +109,7 @@ def send_assets(path):
 
     # Try looking in one of the directories
     filename: str = path.split("/")[-1]
-    if (
-        filename.endswith(".png")
-        or filename.endswith(".jpg")
-        or filename.endswith(".jpeg")
-        or filename.endswith(".svg")
-    ):
+    if filename.endswith((".png", ".jpg", ".jpeg", ".svg")):
         if os.path.isfile("templates/assets/img/" + filename):
             return send_from_directory("templates/assets/img", filename)
         if os.path.isfile("templates/assets/img/favicon/" + filename):
@@ -148,16 +142,13 @@ def service_images(category: str, service: str):
                         break  # Break to return default favicon
 
                 # Pull image from URL and return it
-                try:
-                    req = requests.get(svc["icon"], timeout=5)
-                    if req.status_code == 200:
-                        return make_response(
-                            req.content,
-                            200,
-                            {"Content-Type": req.headers["Content-Type"]},
-                        )
-                except Exception as e:
-                    print(f"Failed to fetch icon for {service}: {e}")
+                req = requests.get(svc["icon"], timeout=5)
+                if req.status_code == 200:
+                    return make_response(
+                        req.content,
+                        200,
+                        {"Content-Type": req.headers["Content-Type"]},
+                    )
 
             # Read default favicon into memory to allow caching (pickling)
             with open("templates/assets/img/favicon.png", "rb") as f:
@@ -187,9 +178,6 @@ def wellknown(path):
 # region Main routes
 @app.route("/")
 def index():
-    # Get current time in the format "dd MMM YYYY hh:mm AM/PM"
-    current_datetime = datetime.now().strftime("%d %b %Y %I:%M %p")
-
     services = load_services()
     user = session.get("user")
 
@@ -200,7 +188,6 @@ def index():
             or "NO_COLOR" in request.headers
         )
         ascii_output = render_ascii_page(
-            datetime_str=current_datetime,
             services=services,
             user=user,
             use_color=use_color,
@@ -211,9 +198,7 @@ def index():
             ascii_output, 200, {"Content-Type": "text/plain; charset=utf-8"}
         )
 
-    return render_template(
-        "index.html", datetime=current_datetime, services=services, user=user
-    )
+    return render_template("index.html", services=services, user=user)
 
 
 @app.route("/<path:path>")

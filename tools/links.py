@@ -1,4 +1,5 @@
 import os
+
 import requests
 
 LINKS_API_KEY = os.getenv("LINKS_API_KEY")

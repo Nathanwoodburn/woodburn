@@ -1,7 +1,9 @@
-import server
-from gunicorn.app.base import BaseApplication
 import os
+
 import dotenv
+from gunicorn.app.base import BaseApplication
+
+import server
 
 
 class GunicornApp(BaseApplication):
@@ -22,8 +24,8 @@ class GunicornApp(BaseApplication):
 if __name__ == "__main__":
     dotenv.load_dotenv()
 
-    workers = os.getenv("WORKERS", 1)
-    threads = os.getenv("THREADS", 2)
+    workers = os.getenv("WORKERS", "1")
+    threads = os.getenv("THREADS", "2")
     workers = int(workers)
     threads = int(threads)
 

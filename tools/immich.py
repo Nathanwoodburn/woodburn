@@ -1,4 +1,5 @@
 import os
+
 import requests
 
 IMMICH_API_KEY = os.getenv("IMMICH_API_KEY")
