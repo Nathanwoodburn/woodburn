@@ -198,6 +198,12 @@ def index():
             ascii_output, 200, {"Content-Type": "text/plain; charset=utf-8"}
         )
 
+    # Passive SSO check on initial visit for unauthenticated users
+    if "user" not in session and not session.get("auth_checked"):
+        session["auth_checked"] = True
+        redirect_uri = url_for("auth_callback", _external=True)
+        return oauth.authentik.authorize_redirect(redirect_uri, prompt="none")  # type: ignore
+
     return render_template("index.html", services=services, user=user)
 
 
@@ -302,16 +308,27 @@ def login():
 
 @app.route("/auth/callback")
 def auth_callback():
-    token = oauth.authentik.authorize_access_token()  # type: ignore
-    user = token.get("userinfo")
-    if user:
-        session["user"] = user
+    # If Authentik returns an error (e.g. login_required or interaction_required with prompt=none)
+    if "error" in request.args:
+        return redirect(url_for("index"))
+
+    try:
+        token = oauth.authentik.authorize_access_token()  # type: ignore
+        user = token.get("userinfo")
+        if user:
+            session["user"] = user
+    except Exception as e:
+        app.logger.warning(f"OAuth callback failed: {e}")
+
     return redirect(url_for("index"))
 
 
 @app.route("/logout")
 def logout():
     session.pop("user", None)
+    session["auth_checked"] = (
+        True  # Prevent immediately auto-redirecting right after logout
+    )
     return redirect(url_for("index"))
 
 
