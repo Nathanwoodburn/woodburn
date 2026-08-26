@@ -3,6 +3,7 @@ import os
 
 import dotenv
 import requests
+from authlib.integrations.base_client.errors import OAuthError
 from authlib.integrations.flask_client import OAuth
 from flask import (
     Flask,
@@ -317,7 +318,7 @@ def auth_callback():
         user = token.get("userinfo")
         if user:
             session["user"] = user
-    except Exception as e:
+    except OAuthError as e:
         app.logger.warning(f"OAuth callback failed: {e}")
 
     return redirect(url_for("index"))
