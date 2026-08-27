@@ -18,7 +18,7 @@ from flask import (
     url_for,
 )
 from flask_caching import Cache
-from werkzeug.exceptions import InternalServerError
+from werkzeug.exceptions import InternalServerError, MethodNotAllowed
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from tools.ascii import render_ascii_page
@@ -255,7 +255,7 @@ def api_cloud_quota():
     return jsonify(quota_info)
 
 
-@app.route("/api/v1/immich", methods=["GET"])
+@app.route("/api/v1/immich")
 def api_immich_stats():
     """
     API endpoint to get the user's Immich stats.
@@ -270,7 +270,7 @@ def api_immich_stats():
     return jsonify(stats)
 
 
-@app.route("/api/v1/links", methods=["GET"])
+@app.route("/api/v1/links")
 def api_links_stats():
     """
     API endpoint to get the user's Links stats.
@@ -289,15 +289,6 @@ def api_links_stats():
 
 # endregion
 
-
-# region Error Catching
-# 404 catch all
-@app.errorhandler(404)
-def not_found(e):
-    return render_template("404.html"), 404
-
-
-# endregion
 # region Auth routes
 
 
@@ -335,12 +326,25 @@ def logout():
 
 # endregion
 
+
 # region Error handling
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("404.html"), 404
 
 
 @app.errorhandler(InternalServerError)
 def handle_internal_server_error(e: InternalServerError):
     return render_template("500.html", message=e.original_exception), 500
+
+
+@app.errorhandler(MethodNotAllowed)
+def handle_method_not_allowed(e: MethodNotAllowed):
+    if isCLI(request):
+        return jsonify(
+            {"status": 405, "message": "Umm, what do you think you are doing?"}
+        ), 405
+    return render_template("405.html"), 405
 
 
 # endregion
