@@ -287,6 +287,10 @@ def api_links_stats():
     return jsonify(stats)
 
 
+# @app.route("/api/v1/user")
+# def api_user_info():
+#     return(session.get("user"))
+
 # endregion
 
 # region Auth routes

@@ -48,6 +48,13 @@
             "description": "Personal Cloud Storage and File Sharing Service"
         },
         {
+            "id": "mail",
+            "name": "Email",
+            "url": "https://mail.woodburn.au/?iam_sso=1",
+            "description": "Woodburn Email service, login to yourname@woodburn.au",
+            "icon": "https://mail.woodburn.au/img/cow_mailcow.svg"
+        },
+        {
             "id": "links",
             "name": "Link Shortener",
             "url": "https://l.woodburn.au",
@@ -86,7 +93,7 @@
             "name": "VPN Service",
             "url": "https://vpn.woodburn.au",
             "description": "Personal VPN Service for Secure Browsing and Remote Access",
-            "icon": "https://netbird.io/icon.png"            
+            "icon": "https://netbird.io/icon.png"
         }
     ]
 }
