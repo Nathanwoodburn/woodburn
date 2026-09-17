@@ -89,6 +89,13 @@
             "icon": "https://adventure.c.woodburn.au/favicon.png"
         },
         {
+            "id":"trek",
+            "name":"Trek",
+            "url":"https://trek.woodburn.au",
+            "description":"Travel planner and tracking",
+            "icon":"https://trek.woodburn.au/icons/icon-white.svg"
+        },
+        {
             "id": "vpn",
             "name": "VPN Service",
             "url": "https://vpn.woodburn.au",
