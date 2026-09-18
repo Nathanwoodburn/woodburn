@@ -24,10 +24,8 @@ class GunicornApp(BaseApplication):
 if __name__ == "__main__":
     dotenv.load_dotenv()
 
-    workers = os.getenv("WORKERS", "1")
-    threads = os.getenv("THREADS", "2")
-    workers = int(workers)
-    threads = int(threads)
+    workers = int(os.getenv("WORKERS", "2"))
+    threads = int(os.getenv("THREADS", "4"))
 
     options = {
         "bind": "0.0.0.0:5000",

@@ -38,15 +38,28 @@
         </div>
 
         {% if user %}
-        <h3 class="section-title">Internal Services</h3>
-        <div class="services-grid">
-            {% for service in services.internal %}
-            <a href="{{ service.url }}" class="service-card" target="_blank" id="{{ service.id }}">
-                <img src="/services/internal/{{ service.id }}.png" alt="{{ service.name }}" class="service-icon">
-                <h4 class="service-name">{{ service.name }}</h4>
-                <p class="service-desc">{{ service.description }}</p>
-            </a>
-            {% endfor %}
+        <div id="internal-services-section">
+            <h3 class="section-title">Internal Services</h3>
+            <div class="services-grid" id="internal-services-grid" data-loading="{{ 'true' if services_loading else 'false' }}">
+                {% if services_loading %}
+                    {% for _ in range(6) %}
+                    <div class="service-card skeleton-card" aria-hidden="true">
+                        <div class="skeleton-shimmer skeleton-icon"></div>
+                        <div class="skeleton-shimmer skeleton-title"></div>
+                        <div class="skeleton-shimmer skeleton-desc"></div>
+                        <div class="skeleton-shimmer skeleton-desc-short"></div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    {% for service in services.internal %}
+                    <a href="{{ service.url }}" class="service-card" target="_blank" id="{{ service.id }}">
+                        <img src="/services/internal/{{ service.id }}.png" alt="{{ service.name }}" class="service-icon" onerror="this.src='/favicon.png'">
+                        <h4 class="service-name">{{ service.name }}</h4>
+                        <p class="service-desc">{{ service.description }}</p>
+                    </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
         {% endif %}
     </div>

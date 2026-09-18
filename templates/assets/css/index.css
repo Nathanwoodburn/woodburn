@@ -112,3 +112,62 @@ a:hover {
 .failure {
     color: #f44336;
 }
+
+/* Skeleton Loading */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton-card {
+    pointer-events: none;
+    cursor: default;
+    min-height: 140px;
+    border: 1px solid #282828;
+    background-color: #1a1a1a;
+}
+
+.skeleton-card:hover {
+    transform: none;
+    background-color: #1a1a1a;
+}
+
+.skeleton-shimmer {
+    background: linear-gradient(
+        90deg,
+        #222222 0%,
+        #333333 50%,
+        #222222 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.skeleton-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.skeleton-title {
+    width: 120px;
+    height: 18px;
+    margin-bottom: 6px;
+}
+
+.skeleton-desc {
+    width: 160px;
+    height: 13px;
+    margin-bottom: 4px;
+}
+
+.skeleton-desc-short {
+    width: 100px;
+    height: 13px;
+}
