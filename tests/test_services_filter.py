@@ -458,3 +458,29 @@ def test_stats_api_server_side_caching():
         assert res2.status_code == 200
         assert mock_quota.call_count == 1
         assert res2.json["total"] == 20
+
+
+def test_detect_image_content_type():
+    from server import detect_image_content_type
+
+    svg_data = b'<svg xmlns="http://www.w3.org/2000/svg"><path/></svg>'
+    png_data = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR"
+    jpg_data = b"\xff\xd8\xff\xe0"
+
+    assert detect_image_content_type(svg_data) == "image/svg+xml"
+    assert detect_image_content_type(png_data) == "image/png"
+    assert detect_image_content_type(jpg_data) == "image/jpeg"
+    assert detect_image_content_type(b"binary", "icon.svg") == "image/svg+xml"
+
+
+def test_svg_service_icons_served_with_svg_mime_type():
+    test_client = app.test_client()
+
+    res_trek = test_client.get("/services/internal/trek.png")
+    assert res_trek.status_code == 200
+    assert res_trek.headers.get("Content-Type") == "image/svg+xml"
+    assert b"<svg" in res_trek.data
+
+    res_mail = test_client.get("/services/internal/mail.png")
+    assert res_mail.status_code == 200
+    assert res_mail.headers.get("Content-Type") == "image/svg+xml"

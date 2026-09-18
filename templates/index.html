@@ -30,7 +30,7 @@
         <div class="services-grid">
             {% for service in services.external %}
             <a href="{{ service.url }}" class="service-card" target="_blank">
-                <img src="/services/external/{{ service.id }}.png" alt="{{ service.name }}" class="service-icon">
+                <img src="/services/external/{{ service.id }}.png?v=2" alt="{{ service.name }}" class="service-icon">
                 <h4 class="service-name">{{ service.name }}</h4>
                 <p class="service-desc">{{ service.description }}</p>
             </a>
@@ -53,7 +53,7 @@
                 {% else %}
                     {% for service in services.internal %}
                     <a href="{{ service.url }}" class="service-card" target="_blank" id="{{ service.id }}">
-                        <img src="/services/internal/{{ service.id }}.png" alt="{{ service.name }}" class="service-icon" onerror="this.src='/favicon.png'">
+                        <img src="/services/internal/{{ service.id }}.png?v=2" alt="{{ service.name }}" class="service-icon" onerror="this.src='/favicon.png'">
                         <h4 class="service-name">{{ service.name }}</h4>
                         <p class="service-desc">{{ service.description }}</p>
                     </a>

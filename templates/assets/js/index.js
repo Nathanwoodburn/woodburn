@@ -47,7 +47,7 @@ function createServiceCard(service) {
     card.id = service.id;
 
     const img = document.createElement("img");
-    img.src = `/services/internal/${service.id}.png`;
+    img.src = `/services/internal/${service.id}.png?v=2`;
     img.alt = service.name;
     img.className = "service-icon";
     img.onerror = function () {

@@ -361,7 +361,44 @@ def send_assets(path):
     return render_template("404.html"), 404
 
 
+def detect_image_content_type(content: bytes, fallback_url: str = "") -> str:
+    """
+    Detect the correct MIME type for image content (SVG, PNG, JPEG, WEBP, ICO, etc.).
+    """
+    stripped = content.lstrip()[:500].lower()
+    if stripped.startswith(b"<svg") or (
+        stripped.startswith(b"<?xml") and b"<svg" in stripped
+    ):
+        return "image/svg+xml"
+    if stripped.startswith(b"\x89png\r\n\x1a\n"):
+        return "image/png"
+    if stripped.startswith(b"\xff\xd8\xff"):
+        return "image/jpeg"
+    if stripped.startswith((b"gif87a", b"gif89a")):
+        return "image/gif"
+    if stripped.startswith(b"riff") and b"webp" in stripped:
+        return "image/webp"
+    if stripped.startswith(b"\x00\x00\x01\x00"):
+        return "image/x-icon"
+
+    url_lower = fallback_url.lower()
+    if url_lower.endswith(".svg"):
+        return "image/svg+xml"
+    if url_lower.endswith((".jpg", ".jpeg")):
+        return "image/jpeg"
+    if url_lower.endswith(".gif"):
+        return "image/gif"
+    if url_lower.endswith(".webp"):
+        return "image/webp"
+    if url_lower.endswith(".ico"):
+        return "image/x-icon"
+
+    return "image/png"
+
+
 @app.route("/services/<string:category>/<string:service>.png")
+@app.route("/services/<string:category>/<string:service>.svg")
+@app.route("/services/<string:category>/<string:service>")
 @cache.cached(timeout=3600, query_string=True)
 def service_images(category: str, service: str):
     services = load_services()
@@ -376,11 +413,13 @@ def service_images(category: str, service: str):
                     )
                     if os.path.isfile(icon_path):
                         with open(icon_path, "rb") as f:
-                            resp = make_response(
-                                f.read(),
-                                200,
-                                {"Content-Type": "image/png"},
-                            )
+                            data = f.read()
+                        content_type = detect_image_content_type(data, svc["icon"])
+                        resp = make_response(
+                            data,
+                            200,
+                            {"Content-Type": content_type},
+                        )
                         resp.headers["Cache-Control"] = (
                             "public, max-age=604800, immutable"
                         )
@@ -395,9 +434,9 @@ def service_images(category: str, service: str):
                 cached_file = os.path.join(cache_dir, f"{service}.png")
                 if os.path.isfile(cached_file):
                     with open(cached_file, "rb") as f:
-                        resp = make_response(
-                            f.read(), 200, {"Content-Type": "image/png"}
-                        )
+                        data = f.read()
+                    content_type = detect_image_content_type(data, svc["icon"])
+                    resp = make_response(data, 200, {"Content-Type": content_type})
                     resp.headers["Cache-Control"] = "public, max-age=604800, immutable"
                     return resp
 
@@ -405,11 +444,27 @@ def service_images(category: str, service: str):
                 try:
                     req = requests.get(svc["icon"], timeout=5)
                     if req.status_code == 200:
-                        content_type = req.headers.get("Content-Type", "image/png")
+                        content = req.content
+                        content_type = req.headers.get("Content-Type")
+                        if (
+                            not content_type
+                            or "text/plain" in content_type
+                            or "octet-stream" in content_type
+                            or "html" in content_type
+                        ):
+                            content_type = detect_image_content_type(
+                                content, svc["icon"]
+                            )
+                        elif (
+                            "svg" in svc["icon"].lower()
+                            and "svg" not in content_type.lower()
+                        ):
+                            content_type = "image/svg+xml"
+
                         with open(cached_file, "wb") as f:
-                            f.write(req.content)
+                            f.write(content)
                         resp = make_response(
-                            req.content,
+                            content,
                             200,
                             {"Content-Type": content_type},
                         )
