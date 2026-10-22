@@ -30,7 +30,7 @@ from tools.immich import get_immich_stats
 dotenv.load_dotenv()
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=2, x_proto=1, x_host=1, x_prefix=1)
 app.secret_key = os.getenv("APP_SECRET_KEY", os.urandom(24))
 
 # Cache Configuration
