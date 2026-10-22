@@ -79,12 +79,6 @@ def get_client_ip(request) -> str:
     """
     Extract the real client IP address considering reverse proxies (Cloudflare, NGINX, etc.).
     """
-    if cf_ip := request.headers.get("CF-Connecting-IP"):
-        return cf_ip.strip()
-    if x_real := request.headers.get("X-Real-IP"):
-        return x_real.strip()
-    if x_forwarded := request.headers.get("X-Forwarded-For"):
-        return x_forwarded.split(",")[0].strip()
     return request.remote_addr or ""
 
 
